@@ -14,6 +14,7 @@ import {
 import Logo from "./logo";
 import { useCurrentUser } from "@/lib/store";
 import { can, type Permission } from "@/lib/permissions";
+import type { Role } from "@/lib/types";
 
 const items: { href: string; label: string; icon: any; perm: Permission }[] = [
   { href: "/", label: "Dashboard", icon: LayoutDashboard, perm: "dashboard" },
@@ -29,7 +30,7 @@ interface SidebarProps {
   onMobileClose?: () => void;
 }
 
-function NavItems({ role, pathname, onItemClick }: { role: string; pathname: string; onItemClick?: () => void }) {
+function NavItems({ role, pathname, onItemClick }: { role: Role; pathname: string; onItemClick?: () => void }) {
   return (
     <nav className="flex-1 overflow-y-auto px-3 py-4 space-y-1" aria-label="Secciones">
       {items.map(({ href, label, icon: Icon, perm }) => {
@@ -83,7 +84,7 @@ const DemoBox = () => (
 export default function Sidebar({ mobileOpen = false, onMobileClose }: SidebarProps) {
   const pathname = usePathname();
   const user = useCurrentUser();
-  const role = user?.role ?? "admin";
+  const role: Role = user?.role ?? "admin";
 
   return (
     <>
