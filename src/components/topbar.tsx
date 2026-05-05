@@ -1,7 +1,7 @@
 "use client";
 
 import { useApp, useCurrentUser } from "@/lib/store";
-import { Bell, Search, ChevronDown, LogOut } from "lucide-react";
+import { Bell, Search, ChevronDown, LogOut, Menu } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState, useRef, useEffect } from "react";
 import Logo from "./logo";
@@ -18,7 +18,11 @@ const roleLabel = {
   entrenador: "Entrenador",
 };
 
-export default function Topbar() {
+interface TopbarProps {
+  onMenuOpen?: () => void;
+}
+
+export default function Topbar({ onMenuOpen }: TopbarProps) {
   const router = useRouter();
   const user = useCurrentUser();
   const users = useApp((s) => s.users);
@@ -52,11 +56,21 @@ export default function Topbar() {
 
   return (
     <header className="sticky top-0 z-30 border-b border-border bg-bg/70 backdrop-blur-xl">
-      <div className="px-6 lg:px-10 h-16 flex items-center gap-4">
-        <div className="lg:hidden">
-          <Logo />
+      <div className="px-4 lg:px-10 h-16 flex items-center gap-3">
+        <button
+          type="button"
+          aria-label="Abrir menú de navegación"
+          onClick={onMenuOpen}
+          className="lg:hidden w-9 h-9 rounded-xl bg-white/5 border border-border flex items-center justify-center hover:bg-white/10 transition shrink-0"
+        >
+          <Menu aria-hidden="true" className="w-4 h-4 text-ink-dim" />
+        </button>
+
+        <div className="lg:hidden shrink-0">
+          <Logo showText={false} size={30} />
         </div>
-        <div className="flex-1 max-w-xl ml-auto lg:ml-0">
+
+        <div className="flex-1 max-w-xl lg:ml-0">
           <div className="relative">
             <Search aria-hidden="true" className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-ink-muted" />
             <label htmlFor="topbar-search" className="sr-only">Buscar</label>
@@ -68,10 +82,11 @@ export default function Topbar() {
             />
           </div>
         </div>
+
         <button
           type="button"
           aria-label={`Notificaciones: ${lowStock} productos en stock crítico`}
-          className="relative w-10 h-10 rounded-xl bg-white/5 border border-border flex items-center justify-center hover:bg-white/10 transition"
+          className="relative w-9 h-9 lg:w-10 lg:h-10 rounded-xl bg-white/5 border border-border flex items-center justify-center hover:bg-white/10 transition shrink-0"
         >
           <Bell aria-hidden="true" className="w-4 h-4 text-ink-dim" />
           {lowStock > 0 && (
@@ -80,17 +95,18 @@ export default function Topbar() {
             </span>
           )}
         </button>
-        <div className="relative" ref={ref}>
+
+        <div className="relative shrink-0" ref={ref}>
           <button
             type="button"
             onClick={() => setOpen((v) => !v)}
             aria-haspopup="menu"
             aria-expanded={open}
             aria-label={`Cambiar de usuario. Activo: ${user?.name ?? "—"}`}
-            className="flex items-center gap-2.5 pl-2 pr-3 py-1.5 rounded-xl bg-white/5 border border-border hover:bg-white/10 transition"
+            className="flex items-center gap-2 pl-2 pr-2.5 py-1.5 rounded-xl bg-white/5 border border-border hover:bg-white/10 transition"
           >
             <div
-              className={`w-7 h-7 rounded-lg bg-gradient-to-br ${roleColor[user?.role ?? "admin"]} flex items-center justify-center text-white text-xs font-bold`}
+              className={`w-7 h-7 rounded-lg bg-gradient-to-br ${roleColor[user?.role ?? "admin"]} flex items-center justify-center text-white text-xs font-bold shrink-0`}
             >
               {(user?.name ?? "").split(" ").map((p) => p[0]).slice(0, 2).join("")}
             </div>

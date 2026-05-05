@@ -12,6 +12,7 @@ export default function AuthShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const router = useRouter();
   const [hydrated, setHydrated] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     setHydrated(true);
@@ -27,6 +28,10 @@ export default function AuthShell({ children }: { children: React.ReactNode }) {
       router.replace("/");
     }
   }, [hydrated, isAuthenticated, isLoginRoute, router]);
+
+  useEffect(() => {
+    setMobileMenuOpen(false);
+  }, [pathname]);
 
   if (!hydrated) {
     return (
@@ -50,12 +55,15 @@ export default function AuthShell({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="min-h-screen flex">
-      <Sidebar />
+      <Sidebar
+        mobileOpen={mobileMenuOpen}
+        onMobileClose={() => setMobileMenuOpen(false)}
+      />
       <div className="flex-1 min-w-0 flex flex-col">
-        <Topbar />
+        <Topbar onMenuOpen={() => setMobileMenuOpen(true)} />
         <main
           id="main-content"
-          className="flex-1 px-6 lg:px-10 py-8 max-w-[1600px] w-full mx-auto"
+          className="flex-1 px-4 lg:px-10 py-6 lg:py-8 max-w-[1600px] w-full mx-auto"
         >
           {children}
         </main>

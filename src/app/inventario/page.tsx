@@ -108,7 +108,7 @@ export default function InventarioPage() {
             placeholder="Buscar por nombre, marca o SKU…"
           />
         </div>
-        <div role="tablist" aria-label="Filtrar por categoría" className="flex items-center gap-1.5 bg-bg-elevated/60 border border-border rounded-xl p-1">
+        <div role="tablist" aria-label="Filtrar por categoría" className="flex items-center gap-1 bg-bg-elevated/60 border border-border rounded-xl p-1 overflow-x-auto shrink-0">
           {[
             { v: "all", l: "Todos" },
             { v: "suplementos", l: "Suplementos" },
@@ -252,7 +252,7 @@ export default function InventarioPage() {
                 <X aria-hidden="true" className="w-4 h-4" />
               </button>
             </div>
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <Field
                 label="Nombre"
                 full

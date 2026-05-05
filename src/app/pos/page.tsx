@@ -116,7 +116,7 @@ export default function POSPage() {
               className="input w-full pl-9"
             />
           </div>
-          <div role="tablist" aria-label="Filtrar por categoría" className="flex items-center gap-1.5 bg-bg-elevated/60 border border-border rounded-xl p-1">
+          <div role="tablist" aria-label="Filtrar por categoría" className="flex items-center gap-1 bg-bg-elevated/60 border border-border rounded-xl p-1 overflow-x-auto shrink-0">
             {[
               { v: "all", l: "Todos" },
               { v: "suplementos", l: "Suplementos" },
@@ -187,7 +187,7 @@ export default function POSPage() {
         </div>
       </div>
 
-      <aside className="glass p-5 sticky top-24 self-start max-h-[calc(100vh-7rem)] flex flex-col">
+      <aside className="glass p-5 lg:sticky lg:top-24 lg:self-start lg:max-h-[calc(100vh-7rem)] flex flex-col">
         <div className="flex items-center justify-between mb-4">
           <div>
             <div className="text-sm font-semibold">Carrito</div>

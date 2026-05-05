@@ -48,7 +48,7 @@ export default function VentasPage() {
         </p>
       </div>
 
-      <div role="tablist" aria-label="Filtrar ventas" className="flex items-center gap-1.5 bg-bg-elevated/60 border border-border rounded-xl p-1 w-fit">
+      <div role="tablist" aria-label="Filtrar ventas" className="flex items-center gap-1 bg-bg-elevated/60 border border-border rounded-xl p-1 overflow-x-auto">
         {[
           { v: "all", l: "Todas" },
           { v: "today", l: "Hoy" },
