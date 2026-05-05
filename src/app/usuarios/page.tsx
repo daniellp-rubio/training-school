@@ -38,6 +38,7 @@ const roleDescription: Record<Role, string> = {
 const empty: Omit<User, "id"> = {
   name: "",
   email: "",
+  password: "Cambiar2026*",
   role: "cajero",
   active: true,
 };

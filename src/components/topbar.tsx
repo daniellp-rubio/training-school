@@ -1,7 +1,8 @@
 "use client";
 
 import { useApp, useCurrentUser } from "@/lib/store";
-import { Bell, Search, ChevronDown } from "lucide-react";
+import { Bell, Search, ChevronDown, LogOut } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useState, useRef, useEffect } from "react";
 import Logo from "./logo";
 
@@ -18,12 +19,19 @@ const roleLabel = {
 };
 
 export default function Topbar() {
+  const router = useRouter();
   const user = useCurrentUser();
   const users = useApp((s) => s.users);
   const setUser = useApp((s) => s.setUser);
+  const logout = useApp((s) => s.logout);
   const products = useApp((s) => s.products);
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
+
+  const handleLogout = () => {
+    logout();
+    router.replace("/login");
+  };
 
   useEffect(() => {
     const onClick = (e: MouseEvent) => {
@@ -127,6 +135,18 @@ export default function Topbar() {
                   )}
                 </button>
               ))}
+              <div className="border-t border-border my-1.5" />
+              <button
+                type="button"
+                role="menuitem"
+                onClick={handleLogout}
+                className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-left hover:bg-rose-400/10 text-rose-300 hover:text-rose-200 transition"
+              >
+                <div className="w-8 h-8 rounded-lg bg-rose-400/10 border border-rose-400/30 flex items-center justify-center">
+                  <LogOut className="w-3.5 h-3.5" />
+                </div>
+                <div className="flex-1 text-sm font-medium">Cerrar sesión</div>
+              </button>
             </div>
           )}
         </div>

@@ -21,6 +21,7 @@ export type User = {
   name: string;
   role: Role;
   email: string;
+  password: string;
   avatar?: string;
   active: boolean;
 };

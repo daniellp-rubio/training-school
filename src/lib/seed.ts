@@ -180,6 +180,7 @@ export const seedUsers: User[] = [
     name: "Camilo Restrepo",
     role: "admin",
     email: "camilo@trainingschool.co",
+    password: "Admin2026*",
     active: true,
   },
   {
@@ -187,6 +188,7 @@ export const seedUsers: User[] = [
     name: "Andrea Gómez",
     role: "cajero",
     email: "andrea@trainingschool.co",
+    password: "Cajero2026*",
     active: true,
   },
   {
@@ -194,6 +196,7 @@ export const seedUsers: User[] = [
     name: "Sebastián Pérez",
     role: "cajero",
     email: "sebastian@trainingschool.co",
+    password: "Cajero2026*",
     active: true,
   },
   {
@@ -201,6 +204,7 @@ export const seedUsers: User[] = [
     name: "Laura Marín",
     role: "entrenador",
     email: "laura@trainingschool.co",
+    password: "Coach2026*",
     active: true,
   },
   {
@@ -208,7 +212,38 @@ export const seedUsers: User[] = [
     name: "Daniel Ortiz",
     role: "entrenador",
     email: "daniel@trainingschool.co",
+    password: "Coach2026*",
     active: false,
+  },
+];
+
+export const DEMO_CREDENTIALS = [
+  {
+    role: "admin" as const,
+    label: "Administrador",
+    description: "Control total — equipo, inventario y configuración",
+    name: "Camilo Restrepo",
+    email: "camilo@trainingschool.co",
+    password: "Admin2026*",
+    accent: "from-blue-500 to-indigo-700",
+  },
+  {
+    role: "cajero" as const,
+    label: "Cajero",
+    description: "Punto de venta + ventas + lectura de inventario",
+    name: "Andrea Gómez",
+    email: "andrea@trainingschool.co",
+    password: "Cajero2026*",
+    accent: "from-cyan-400 to-blue-600",
+  },
+  {
+    role: "entrenador" as const,
+    label: "Entrenador",
+    description: "Lectura de inventario + asesor IA Coach Pro",
+    name: "Laura Marín",
+    email: "laura@trainingschool.co",
+    password: "Coach2026*",
+    accent: "from-fuchsia-400 to-purple-600",
   },
 ];
 

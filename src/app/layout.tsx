@@ -2,8 +2,7 @@ import "./globals.css";
 import type { Metadata, Viewport } from "next";
 import { GeistSans } from "geist/font/sans";
 import { GeistMono } from "geist/font/mono";
-import Sidebar from "@/components/sidebar";
-import Topbar from "@/components/topbar";
+import AuthShell from "@/components/auth-shell";
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://training-school.vercel.app";
 
@@ -79,18 +78,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         >
           Saltar al contenido principal
         </a>
-        <div className="min-h-screen flex">
-          <Sidebar />
-          <div className="flex-1 min-w-0 flex flex-col">
-            <Topbar />
-            <main
-              id="main-content"
-              className="flex-1 px-6 lg:px-10 py-8 max-w-[1600px] w-full mx-auto"
-            >
-              {children}
-            </main>
-          </div>
-        </div>
+        <AuthShell>{children}</AuthShell>
       </body>
     </html>
   );
