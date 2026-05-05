@@ -1,0 +1,75 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+}
+
+html, body {
+  background: #070709;
+  color: #e8e8ee;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  background-image:
+    radial-gradient(900px circle at 10% -10%, rgba(163,255,18,0.10), transparent 50%),
+    radial-gradient(700px circle at 100% 0%, rgba(120,80,255,0.08), transparent 60%),
+    linear-gradient(180deg, #070709 0%, #04040a 100%);
+  min-height: 100vh;
+}
+
+* { border-color: rgba(255,255,255,0.06); }
+
+::selection { background: rgba(163,255,18,0.35); color: #e8e8ee; }
+
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  background: rgba(255,255,255,0.08);
+  border-radius: 8px;
+}
+::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.15); }
+
+@layer components {
+  .glass {
+    @apply bg-bg-card/60 backdrop-blur-xl border border-border rounded-2xl;
+  }
+  .glass-strong {
+    @apply bg-bg-card/85 backdrop-blur-2xl border border-border-strong rounded-2xl;
+  }
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 px-4 py-2 rounded-xl text-sm font-medium transition-all;
+  }
+  .btn-primary {
+    @apply btn bg-accent text-black hover:bg-accent-dim shadow-glow;
+  }
+  .btn-ghost {
+    @apply btn bg-white/5 hover:bg-white/10 text-ink border border-border;
+  }
+  .input {
+    @apply bg-bg-elevated/80 border border-border rounded-xl px-3 py-2 text-sm placeholder:text-ink-muted focus:outline-none focus:border-accent/50 focus:ring-1 focus:ring-accent/30 transition;
+  }
+  .chip {
+    @apply inline-flex items-center gap-1.5 px-2.5 py-1 text-xs rounded-full border border-border bg-white/5;
+  }
+  .grid-bg {
+    background-image:
+      linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px);
+    background-size: 32px 32px;
+    mask-image: radial-gradient(ellipse at center, black 30%, transparent 75%);
+  }
+}
+
+.shine {
+  background: linear-gradient(
+    90deg,
+    rgba(163,255,18,0) 0%,
+    rgba(163,255,18,0.15) 50%,
+    rgba(163,255,18,0) 100%
+  );
+  background-size: 1000px 100%;
+}
