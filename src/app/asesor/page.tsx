@@ -38,10 +38,13 @@ export default function AsesorPage() {
     const next: Msg[] = [...messages, { role: "user", content: text }];
     setMessages(next);
     setLoading(true);
+    const controller = new AbortController();
+    const timeoutId = window.setTimeout(() => controller.abort(), 15000);
     try {
       const r = await fetch("/api/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
+        signal: controller.signal,
         body: JSON.stringify({
           messages: next,
           products: products.map(({ name, brand, category, price, cost, stock, minStock }) => ({
@@ -62,13 +65,23 @@ export default function AsesorPage() {
       });
       const data = await r.json();
       if (data.fallback) setFallbackMode(true);
-      setMessages([...next, { role: "assistant", content: data.reply ?? "Sin respuesta." }]);
+      const reply =
+        data.reply ??
+        (data.error ? `Error: ${data.error}` : "Sin respuesta del servidor.");
+      setMessages([...next, { role: "assistant", content: reply }]);
     } catch (e) {
+      const aborted = e instanceof DOMException && e.name === "AbortError";
       setMessages([
         ...next,
-        { role: "assistant", content: "Error de conexión. Intenta de nuevo en unos segundos." },
+        {
+          role: "assistant",
+          content: aborted
+            ? "Tiempo de espera agotado. Intenta una pregunta más corta."
+            : "Error de conexión. Intenta de nuevo en unos segundos.",
+        },
       ]);
     } finally {
+      window.clearTimeout(timeoutId);
       setLoading(false);
     }
   };
@@ -105,7 +118,13 @@ export default function AsesorPage() {
           )}
         </div>
 
-        <div ref={scroller} className="flex-1 overflow-y-auto p-6 space-y-4">
+        <div
+          ref={scroller}
+          role="log"
+          aria-live="polite"
+          aria-label="Conversación con Coach Pro"
+          className="flex-1 overflow-y-auto p-6 space-y-4"
+        >
           {messages.length === 0 && (
             <div className="max-w-md mx-auto text-center pt-10">
               <div className="w-14 h-14 mx-auto rounded-2xl bg-gradient-to-br from-accent/20 to-accent/5 border border-accent/30 flex items-center justify-center mb-4">
@@ -171,9 +190,12 @@ export default function AsesorPage() {
               e.preventDefault();
               send();
             }}
+            aria-label="Enviar pregunta al asesor IA"
             className="flex items-center gap-2"
           >
+            <label htmlFor="asesor-input" className="sr-only">Pregunta para Coach Pro</label>
             <input
+              id="asesor-input"
               value={input}
               onChange={(e) => setInput(e.target.value)}
               placeholder="Pregúntale algo a Coach Pro…"
@@ -182,10 +204,11 @@ export default function AsesorPage() {
             />
             <button
               type="submit"
+              aria-label="Enviar pregunta"
               disabled={!input.trim() || loading}
               className="btn-primary px-4 py-2.5 disabled:opacity-40 disabled:shadow-none"
             >
-              <Send className="w-4 h-4" />
+              <Send aria-hidden="true" className="w-4 h-4" />
             </button>
           </form>
         </div>

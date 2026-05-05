@@ -1,50 +1,69 @@
 import Anthropic from "@anthropic-ai/sdk";
 import { NextRequest } from "next/server";
+import { z } from "zod";
+import type {
+  ChatMessage,
+  ChatProductSlim,
+  ChatSaleSlim,
+  ChatResponse,
+} from "@/lib/types";
 
 export const runtime = "nodejs";
-export const maxDuration = 30;
+export const maxDuration = 10;
 
-type Product = {
-  name: string;
-  brand: string;
-  category: string;
-  price: number;
-  cost: number;
-  stock: number;
-  minStock: number;
-};
+const MessageSchema = z.object({
+  role: z.enum(["user", "assistant"]),
+  content: z.string().min(1).max(4000),
+});
 
-type Sale = {
-  date: string;
-  total: number;
-  items: { name: string; qty: number; unitPrice: number }[];
-};
+const ProductSchema = z.object({
+  name: z.string().max(120),
+  brand: z.string().max(80),
+  category: z.string().max(40),
+  price: z.number().nonnegative(),
+  cost: z.number().nonnegative(),
+  stock: z.number().int().nonnegative(),
+  minStock: z.number().int().nonnegative(),
+});
 
-type Body = {
-  messages: { role: "user" | "assistant"; content: string }[];
-  products: Product[];
-  sales: Sale[];
-};
+const SaleItemSchema = z.object({
+  name: z.string().max(120),
+  qty: z.number().int().positive(),
+  unitPrice: z.number().nonnegative(),
+});
 
-function buildContext(products: Product[], sales: Sale[]) {
+const SaleSchema = z.object({
+  date: z.string(),
+  total: z.number().nonnegative(),
+  items: z.array(SaleItemSchema).max(50),
+});
+
+const BodySchema = z.object({
+  messages: z.array(MessageSchema).min(1).max(40),
+  products: z.array(ProductSchema).max(500),
+  sales: z.array(SaleSchema).max(500),
+});
+
+function buildContext(products: ChatProductSlim[], sales: ChatSaleSlim[]) {
   const totalRevenue = sales.reduce((a, s) => a + s.total, 0);
-  const last7 = sales.filter((s) => {
-    const d = new Date(s.date);
-    return Date.now() - d.getTime() < 7 * 86400000;
-  });
+  const last7 = sales.filter(
+    (s) => Date.now() - new Date(s.date).getTime() < 7 * 86400000
+  );
   const last7Revenue = last7.reduce((a, s) => a + s.total, 0);
 
   const unitsByProduct = new Map<string, number>();
-  sales.forEach((s) =>
-    s.items.forEach((i) => unitsByProduct.set(i.name, (unitsByProduct.get(i.name) ?? 0) + i.qty))
-  );
+  for (const s of sales) {
+    for (const i of s.items) {
+      unitsByProduct.set(i.name, (unitsByProduct.get(i.name) ?? 0) + i.qty);
+    }
+  }
 
   const productLines = products
     .map((p) => {
       const sold = unitsByProduct.get(p.name) ?? 0;
       const status =
         p.stock === 0 ? "AGOTADO" : p.stock <= p.minStock ? "STOCK CRÍTICO" : "OK";
-      const margin = ((p.price - p.cost) / p.price) * 100;
+      const margin = p.price > 0 ? ((p.price - p.cost) / p.price) * 100 : 0;
       return `- ${p.name} (${p.brand}) | cat:${p.category} | precio:$${p.price} | costo:$${p.cost} | margen:${margin.toFixed(0)}% | stock:${p.stock}/min:${p.minStock} | unid_vendidas_total:${sold} | ${status}`;
     })
     .join("\n");
@@ -70,54 +89,80 @@ REGLAS DE RESPUESTA:
 6. Cuando sea útil, usa listas con guiones o tablas markdown simples.`;
 }
 
+function jsonResponse(data: ChatResponse, status: number) {
+  return Response.json(data, { status });
+}
+
 export async function POST(req: NextRequest) {
+  let raw: unknown;
   try {
-    const body = (await req.json()) as Body;
-    const apiKey = process.env.ANTHROPIC_API_KEY;
+    raw = await req.json();
+  } catch {
+    return jsonResponse({ ok: false, error: "JSON inválido" }, 400);
+  }
 
-    if (!apiKey) {
-      return Response.json(
-        {
-          ok: false,
-          fallback: true,
-          reply: fallbackReply(body.products, body.sales, body.messages),
-        },
-        { status: 200 }
-      );
-    }
+  const parsed = BodySchema.safeParse(raw);
+  if (!parsed.success) {
+    return jsonResponse(
+      { ok: false, error: "Payload inválido: " + parsed.error.issues[0]?.message },
+      400
+    );
+  }
 
-    const client = new Anthropic({ apiKey });
-    const system = buildContext(body.products, body.sales);
+  const { messages, products, sales } = parsed.data;
+  const apiKey = process.env.ANTHROPIC_API_KEY;
+
+  if (!apiKey) {
+    return jsonResponse(
+      { ok: false, fallback: true, reply: fallbackReply(products, sales, messages) },
+      200
+    );
+  }
+
+  try {
+    const client = new Anthropic({ apiKey, timeout: 8000 });
+    const system = buildContext(products, sales);
 
     const resp = await client.messages.create({
       model: "claude-haiku-4-5-20251001",
       max_tokens: 1024,
       system,
-      messages: body.messages.map((m) => ({ role: m.role, content: m.content })),
+      messages,
     });
 
     const textBlock = resp.content.find((b) => b.type === "text");
     const reply = textBlock && "text" in textBlock ? textBlock.text : "Sin respuesta.";
-    return Response.json({ ok: true, reply });
-  } catch (err: any) {
-    return Response.json(
-      { ok: false, error: err?.message ?? "error", reply: "El asesor está temporalmente fuera de servicio. Intenta de nuevo." },
-      { status: 200 }
+    return jsonResponse({ ok: true, reply }, 200);
+  } catch (err) {
+    const message = err instanceof Error ? err.message : "error desconocido";
+    return jsonResponse(
+      { ok: false, fallback: true, reply: fallbackReply(products, sales, messages) },
+      503
     );
   }
 }
 
-function fallbackReply(products: Product[], sales: Sale[], messages: Body["messages"]) {
+function fallbackReply(
+  products: ChatProductSlim[],
+  sales: ChatSaleSlim[],
+  messages: ChatMessage[]
+) {
   const last = messages[messages.length - 1]?.content?.toLowerCase() ?? "";
-  const critical = products.filter((p) => p.stock <= p.minStock).sort((a, b) => a.stock - b.stock);
+  const critical = products
+    .filter((p) => p.stock <= p.minStock)
+    .sort((a, b) => a.stock - b.stock);
+
   const unitsByProduct = new Map<string, number>();
-  sales.forEach((s) =>
-    s.items.forEach((i) => unitsByProduct.set(i.name, (unitsByProduct.get(i.name) ?? 0) + i.qty))
-  );
+  for (const s of sales) {
+    for (const i of s.items) {
+      unitsByProduct.set(i.name, (unitsByProduct.get(i.name) ?? 0) + i.qty);
+    }
+  }
   const top = [...unitsByProduct.entries()].sort((a, b) => b[1] - a[1]).slice(0, 3);
 
   if (last.includes("reabast") || last.includes("comprar") || last.includes("pedir")) {
-    if (critical.length === 0) return "Inventario saludable: ningún SKU está bajo el mínimo. Te sugiero igual revisar los top sellers para asegurar 2 semanas de cobertura.";
+    if (critical.length === 0)
+      return "Inventario saludable: ningún SKU está bajo el mínimo. Te sugiero igual revisar los top sellers para asegurar 2 semanas de cobertura.";
     const lines = critical.slice(0, 5).map((p) => {
       const sold = unitsByProduct.get(p.name) ?? 0;
       return `• ${p.name} — stock ${p.stock}/${p.minStock} (vendidas histórico: ${sold})`;
@@ -130,7 +175,10 @@ function fallbackReply(products: Product[], sales: Sale[], messages: Body["messa
   }
   if (last.includes("margen") || last.includes("rentab")) {
     const ranked = products
-      .map((p) => ({ name: p.name, margin: ((p.price - p.cost) / p.price) * 100 }))
+      .map((p) => ({
+        name: p.name,
+        margin: p.price > 0 ? ((p.price - p.cost) / p.price) * 100 : 0,
+      }))
       .sort((a, b) => b.margin - a.margin)
       .slice(0, 5);
     return `Mejores márgenes:\n${ranked.map((r) => `• ${r.name} — ${r.margin.toFixed(0)}%`).join("\n")}`;

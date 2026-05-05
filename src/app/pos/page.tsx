@@ -104,8 +104,11 @@ export default function POSPage() {
 
         <div className="flex items-center gap-3 mb-4 flex-wrap">
           <div className="relative flex-1 min-w-[260px]">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-ink-muted" />
+            <Search aria-hidden="true" className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-ink-muted" />
+            <label htmlFor="pos-search" className="sr-only">Buscar producto</label>
             <input
+              id="pos-search"
+              type="search"
               autoFocus
               value={q}
               onChange={(e) => setQ(e.target.value)}
@@ -113,7 +116,7 @@ export default function POSPage() {
               className="input w-full pl-9"
             />
           </div>
-          <div className="flex items-center gap-1.5 bg-bg-elevated/60 border border-border rounded-xl p-1">
+          <div role="tablist" aria-label="Filtrar por categoría" className="flex items-center gap-1.5 bg-bg-elevated/60 border border-border rounded-xl p-1">
             {[
               { v: "all", l: "Todos" },
               { v: "suplementos", l: "Suplementos" },
@@ -122,6 +125,9 @@ export default function POSPage() {
             ].map((c) => (
               <button
                 key={c.v}
+                type="button"
+                role="tab"
+                aria-selected={cat === c.v}
                 onClick={() => setCat(c.v)}
                 className={`px-3 py-1.5 text-xs rounded-lg transition ${
                   cat === c.v ? "bg-accent text-black font-semibold" : "text-ink-dim hover:text-ink"
@@ -140,6 +146,8 @@ export default function POSPage() {
             return (
               <button
                 key={p.id}
+                type="button"
+                aria-label={`Añadir ${p.name} al carrito. Precio ${formatCOP(p.price)}. Stock ${p.stock}.${out ? " Agotado." : low ? " Stock bajo." : ""}`}
                 onClick={() => !out && addToCart(p.id, 1)}
                 disabled={out}
                 className={`glass p-4 text-left transition relative group ${
@@ -150,7 +158,7 @@ export default function POSPage() {
               >
                 <div className="flex items-start justify-between gap-2">
                   <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-white/10 to-white/5 border border-border flex items-center justify-center">
-                    <Package className="w-5 h-5 text-ink-dim" />
+                    <Package aria-hidden="true" className="w-5 h-5 text-ink-dim" />
                   </div>
                   {low && !out && (
                     <span className="chip text-amber-400 border-amber-400/40 bg-amber-400/10 text-[10px]">
@@ -211,29 +219,35 @@ export default function POSPage() {
                     <div className="text-[10px] text-ink-muted">{formatCOP(l.product.price)} c/u</div>
                   </div>
                   <button
+                    type="button"
+                    aria-label={`Quitar ${l.product.name} del carrito`}
                     onClick={() => removeFromCart(l.productId)}
                     className="text-ink-muted hover:text-rose-400"
                   >
-                    <Trash2 className="w-3.5 h-3.5" />
+                    <Trash2 aria-hidden="true" className="w-3.5 h-3.5" />
                   </button>
                 </div>
                 <div className="mt-2 flex items-center justify-between">
                   <div className="flex items-center gap-1.5 bg-bg-elevated rounded-lg border border-border">
                     <button
+                      type="button"
+                      aria-label={`Disminuir cantidad de ${l.product.name}`}
                       onClick={() => setCartQty(l.productId, l.qty - 1)}
                       className="w-7 h-7 flex items-center justify-center hover:bg-white/5 rounded-l-lg"
                     >
-                      <Minus className="w-3 h-3" />
+                      <Minus aria-hidden="true" className="w-3 h-3" />
                     </button>
-                    <span className="text-sm font-medium w-6 text-center">{l.qty}</span>
+                    <span aria-live="polite" aria-label={`Cantidad: ${l.qty}`} className="text-sm font-medium w-6 text-center">{l.qty}</span>
                     <button
+                      type="button"
+                      aria-label={`Aumentar cantidad de ${l.product.name}`}
                       onClick={() =>
                         l.qty < l.product.stock && setCartQty(l.productId, l.qty + 1)
                       }
                       className="w-7 h-7 flex items-center justify-center hover:bg-white/5 rounded-r-lg disabled:opacity-30"
                       disabled={l.qty >= l.product.stock}
                     >
-                      <Plus className="w-3 h-3" />
+                      <Plus aria-hidden="true" className="w-3 h-3" />
                     </button>
                   </div>
                   <div className="text-sm font-bold">{formatCOP(l.subtotal)}</div>
@@ -249,28 +263,36 @@ export default function POSPage() {
         </div>
 
         <div className="border-t border-border pt-4 mt-4 space-y-3">
+          <label htmlFor="pos-customer" className="sr-only">Nombre del cliente (opcional)</label>
           <input
+            id="pos-customer"
             value={customer}
             onChange={(e) => setCustomer(e.target.value)}
             placeholder="Nombre del cliente (opcional)"
             className="input w-full"
           />
-          <div className="grid grid-cols-2 gap-2">
-            {methods.map((m) => (
-              <button
-                key={m.id}
-                onClick={() => setMethod(m.id)}
-                className={`flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-medium transition border ${
-                  method === m.id
-                    ? "bg-accent/15 border-accent/50 text-accent"
-                    : "bg-white/5 border-border text-ink-dim hover:text-ink"
-                }`}
-              >
-                <m.icon className="w-3.5 h-3.5" />
-                {m.label}
-              </button>
-            ))}
-          </div>
+          <fieldset>
+            <legend className="sr-only">Método de pago</legend>
+            <div role="radiogroup" aria-label="Método de pago" className="grid grid-cols-2 gap-2">
+              {methods.map((m) => (
+                <button
+                  key={m.id}
+                  type="button"
+                  role="radio"
+                  aria-checked={method === m.id}
+                  onClick={() => setMethod(m.id)}
+                  className={`flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-medium transition border ${
+                    method === m.id
+                      ? "bg-accent/15 border-accent/50 text-accent"
+                      : "bg-white/5 border-border text-ink-dim hover:text-ink"
+                  }`}
+                >
+                  <m.icon aria-hidden="true" className="w-3.5 h-3.5" />
+                  {m.label}
+                </button>
+              ))}
+            </div>
+          </fieldset>
           <div className="flex items-center justify-between">
             <span className="text-sm text-ink-dim">Total</span>
             <span className="text-2xl font-bold text-accent">{formatCOP(total)}</span>
@@ -287,12 +309,14 @@ export default function POSPage() {
         <AnimatePresence>
           {confirm && (
             <motion.div
+              role="status"
+              aria-live="polite"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0 }}
               className="fixed bottom-6 right-6 glass-strong px-5 py-4 flex items-center gap-3 shadow-glow z-50"
             >
-              <CheckCircle2 className="w-5 h-5 text-accent" />
+              <CheckCircle2 aria-hidden="true" className="w-5 h-5 text-accent" />
               <div>
                 <div className="text-sm font-semibold">Venta registrada</div>
                 <div className="text-xs text-ink-muted">

@@ -97,15 +97,18 @@ export default function InventarioPage() {
 
       <div className="flex items-center gap-3 flex-wrap">
         <div className="relative flex-1 min-w-[260px] max-w-md">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-ink-muted" />
+          <Search aria-hidden="true" className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-ink-muted" />
+          <label htmlFor="inv-search" className="sr-only">Buscar producto</label>
           <input
+            id="inv-search"
+            type="search"
             value={q}
             onChange={(e) => setQ(e.target.value)}
             className="input w-full pl-9"
             placeholder="Buscar por nombre, marca o SKU…"
           />
         </div>
-        <div className="flex items-center gap-1.5 bg-bg-elevated/60 border border-border rounded-xl p-1">
+        <div role="tablist" aria-label="Filtrar por categoría" className="flex items-center gap-1.5 bg-bg-elevated/60 border border-border rounded-xl p-1">
           {[
             { v: "all", l: "Todos" },
             { v: "suplementos", l: "Suplementos" },
@@ -114,6 +117,9 @@ export default function InventarioPage() {
           ].map((c) => (
             <button
               key={c.v}
+              type="button"
+              role="tab"
+              aria-selected={cat === c.v}
               onClick={() => setCat(c.v)}
               className={`px-3 py-1.5 text-xs rounded-lg transition ${
                 cat === c.v ? "bg-accent text-black font-semibold" : "text-ink-dim hover:text-ink"
@@ -185,18 +191,22 @@ export default function InventarioPage() {
                       <td className="px-5 py-3">
                         <div className="flex items-center justify-end gap-1">
                           <button
+                            type="button"
+                            aria-label={`Editar ${p.name}`}
                             onClick={() => setEditing({ ...p })}
                             className="p-2 rounded-lg hover:bg-white/5 text-ink-dim hover:text-ink"
                           >
-                            <Edit3 className="w-3.5 h-3.5" />
+                            <Edit3 aria-hidden="true" className="w-3.5 h-3.5" />
                           </button>
                           <button
+                            type="button"
+                            aria-label={`Eliminar ${p.name}`}
                             onClick={() => {
                               if (confirm(`¿Eliminar "${p.name}"?`)) deleteProduct(p.id);
                             }}
                             className="p-2 rounded-lg hover:bg-rose-400/10 text-ink-muted hover:text-rose-400"
                           >
-                            <Trash2 className="w-3.5 h-3.5" />
+                            <Trash2 aria-hidden="true" className="w-3.5 h-3.5" />
                           </button>
                         </div>
                       </td>
@@ -217,21 +227,29 @@ export default function InventarioPage() {
       </div>
 
       {editing && (
-        <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4">
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="inv-modal-title"
+          onKeyDown={(e) => e.key === "Escape" && setEditing(null)}
+          className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4"
+        >
           <motion.div
             initial={{ opacity: 0, scale: 0.96 }}
             animate={{ opacity: 1, scale: 1 }}
             className="glass-strong w-full max-w-lg p-6"
           >
             <div className="flex items-center justify-between mb-5">
-              <h2 className="text-lg font-bold">
+              <h2 id="inv-modal-title" className="text-lg font-bold">
                 {("id" in editing && editing.id) ? "Editar producto" : "Nuevo producto"}
               </h2>
               <button
+                type="button"
+                aria-label="Cerrar diálogo"
                 onClick={() => setEditing(null)}
                 className="p-2 rounded-lg hover:bg-white/5"
               >
-                <X className="w-4 h-4" />
+                <X aria-hidden="true" className="w-4 h-4" />
               </button>
             </div>
             <div className="grid grid-cols-2 gap-3">

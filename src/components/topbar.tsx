@@ -29,8 +29,15 @@ export default function Topbar() {
     const onClick = (e: MouseEvent) => {
       if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
     };
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setOpen(false);
+    };
     document.addEventListener("mousedown", onClick);
-    return () => document.removeEventListener("mousedown", onClick);
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("mousedown", onClick);
+      document.removeEventListener("keydown", onKey);
+    };
   }, []);
 
   const lowStock = products.filter((p) => p.stock <= p.minStock).length;
@@ -43,27 +50,35 @@ export default function Topbar() {
         </div>
         <div className="flex-1 max-w-xl ml-auto lg:ml-0">
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-ink-muted" />
+            <Search aria-hidden="true" className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-ink-muted" />
+            <label htmlFor="topbar-search" className="sr-only">Buscar</label>
             <input
+              id="topbar-search"
+              type="search"
               className="input w-full pl-9 hidden md:block"
               placeholder="Buscar productos, ventas, usuarios…"
             />
           </div>
         </div>
         <button
+          type="button"
+          aria-label={`Notificaciones: ${lowStock} productos en stock crítico`}
           className="relative w-10 h-10 rounded-xl bg-white/5 border border-border flex items-center justify-center hover:bg-white/10 transition"
-          title={`${lowStock} productos en stock crítico`}
         >
-          <Bell className="w-4 h-4 text-ink-dim" />
+          <Bell aria-hidden="true" className="w-4 h-4 text-ink-dim" />
           {lowStock > 0 && (
-            <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 rounded-full bg-accent text-black text-[10px] font-bold flex items-center justify-center">
+            <span aria-hidden="true" className="absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 rounded-full bg-accent text-black text-[10px] font-bold flex items-center justify-center">
               {lowStock}
             </span>
           )}
         </button>
         <div className="relative" ref={ref}>
           <button
+            type="button"
             onClick={() => setOpen((v) => !v)}
+            aria-haspopup="menu"
+            aria-expanded={open}
+            aria-label={`Cambiar de usuario. Activo: ${user?.name ?? "—"}`}
             className="flex items-center gap-2.5 pl-2 pr-3 py-1.5 rounded-xl bg-white/5 border border-border hover:bg-white/10 transition"
           >
             <div
@@ -77,16 +92,19 @@ export default function Topbar() {
                 {roleLabel[user?.role ?? "admin"]}
               </div>
             </div>
-            <ChevronDown className="w-3.5 h-3.5 text-ink-muted" />
+            <ChevronDown aria-hidden="true" className="w-3.5 h-3.5 text-ink-muted" />
           </button>
           {open && (
-            <div className="absolute right-0 mt-2 w-72 glass-strong p-2 z-50">
+            <div role="menu" aria-label="Cambiar de usuario" className="absolute right-0 mt-2 w-72 glass-strong p-2 z-50">
               <div className="px-3 py-2 text-[10px] uppercase tracking-wider text-ink-muted">
                 Cambiar de usuario (demo)
               </div>
               {users.filter((u) => u.active).map((u) => (
                 <button
                   key={u.id}
+                  type="button"
+                  role="menuitem"
+                  aria-current={u.id === user?.id}
                   onClick={() => {
                     setUser(u.id);
                     setOpen(false);

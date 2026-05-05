@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#070709"/>
+      <stop offset="1" stop-color="#04040a"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.15" cy="0.1" r="0.6">
+      <stop offset="0" stop-color="#a3ff12" stop-opacity="0.25"/>
+      <stop offset="1" stop-color="#a3ff12" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect width="1200" height="630" fill="url(#glow)"/>
+  <g transform="translate(80,180)">
+    <text x="0" y="0" font-family="system-ui, -apple-system, Segoe UI, sans-serif" font-size="22" letter-spacing="6" fill="#a3ff12" font-weight="600">TIENDA OS · MEDELLÍN</text>
+    <text x="0" y="90" font-family="system-ui, -apple-system, Segoe UI, sans-serif" font-size="84" fill="#e8e8ee" font-weight="800">Training School</text>
+    <text x="0" y="180" font-family="system-ui, -apple-system, Segoe UI, sans-serif" font-size="44" fill="#a8a8b8" font-weight="500">Inventario · POS · Asesor IA</text>
+    <text x="0" y="280" font-family="system-ui, -apple-system, Segoe UI, sans-serif" font-size="26" fill="#7a7a8a">Decisiones de tienda con datos en tiempo real</text>
+  </g>
+  <g transform="translate(880,440)">
+    <circle cx="80" cy="80" r="80" fill="#a3ff12" opacity="0.12"/>
+    <circle cx="80" cy="80" r="48" fill="#a3ff12"/>
+    <text x="80" y="92" text-anchor="middle" font-family="system-ui" font-size="44" fill="#000" font-weight="800">TS</text>
+  </g>
+</svg>

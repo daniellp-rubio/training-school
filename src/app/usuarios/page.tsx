@@ -182,18 +182,22 @@ export default function UsuariosPage() {
                   <td className="px-5 py-3">
                     <div className="flex items-center justify-end gap-1">
                       <button
+                        type="button"
+                        aria-label={`Editar usuario ${u.name}`}
                         onClick={() => setEditing({ ...u })}
                         className="p-2 rounded-lg hover:bg-white/5 text-ink-dim hover:text-ink"
                       >
-                        <Edit3 className="w-3.5 h-3.5" />
+                        <Edit3 aria-hidden="true" className="w-3.5 h-3.5" />
                       </button>
                       <button
+                        type="button"
+                        aria-label={`Eliminar usuario ${u.name}`}
                         onClick={() => {
                           if (confirm(`¿Eliminar a ${u.name}?`)) deleteUser(u.id);
                         }}
                         className="p-2 rounded-lg hover:bg-rose-400/10 text-ink-muted hover:text-rose-400"
                       >
-                        <Trash2 className="w-3.5 h-3.5" />
+                        <Trash2 aria-hidden="true" className="w-3.5 h-3.5" />
                       </button>
                     </div>
                   </td>
@@ -205,21 +209,29 @@ export default function UsuariosPage() {
       </div>
 
       {editing && (
-        <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4">
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="user-modal-title"
+          onKeyDown={(e) => e.key === "Escape" && setEditing(null)}
+          className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4"
+        >
           <motion.div
             initial={{ opacity: 0, scale: 0.96 }}
             animate={{ opacity: 1, scale: 1 }}
             className="glass-strong w-full max-w-md p-6"
           >
             <div className="flex items-center justify-between mb-5">
-              <h2 className="text-lg font-bold">
+              <h2 id="user-modal-title" className="text-lg font-bold">
                 {("id" in editing && editing.id) ? "Editar usuario" : "Nuevo usuario"}
               </h2>
               <button
+                type="button"
+                aria-label="Cerrar diálogo"
                 onClick={() => setEditing(null)}
                 className="p-2 rounded-lg hover:bg-white/5"
               >
-                <X className="w-4 h-4" />
+                <X aria-hidden="true" className="w-4 h-4" />
               </button>
             </div>
             <div className="space-y-3">

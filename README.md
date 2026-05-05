@@ -61,3 +61,4 @@ Variables de entorno en Vercel:
 ## Reset de datos
 
 En `/usuarios` → botón **Reset demo** restaura el catálogo, usuarios y ventas seed.
+# training-school

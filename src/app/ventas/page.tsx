@@ -48,7 +48,7 @@ export default function VentasPage() {
         </p>
       </div>
 
-      <div className="flex items-center gap-1.5 bg-bg-elevated/60 border border-border rounded-xl p-1 w-fit">
+      <div role="tablist" aria-label="Filtrar ventas" className="flex items-center gap-1.5 bg-bg-elevated/60 border border-border rounded-xl p-1 w-fit">
         {[
           { v: "all", l: "Todas" },
           { v: "today", l: "Hoy" },
@@ -59,6 +59,9 @@ export default function VentasPage() {
         ].map((f) => (
           <button
             key={f.v}
+            type="button"
+            role="tab"
+            aria-selected={filter === f.v}
             onClick={() => setFilter(f.v)}
             className={`px-3 py-1.5 text-xs rounded-lg transition ${
               filter === f.v ? "bg-accent text-black font-semibold" : "text-ink-dim hover:text-ink"
@@ -76,11 +79,14 @@ export default function VentasPage() {
           return (
             <div key={s.id} className="glass overflow-hidden">
               <button
+                type="button"
+                aria-expanded={isOpen}
+                aria-label={`Venta ${s.id.slice(0, 10)}, total ${formatCOP(s.total)}, ${isOpen ? "ocultar" : "ver"} detalle`}
                 onClick={() => setOpen(isOpen ? null : s.id)}
                 className="w-full flex items-center gap-4 p-4 text-left hover:bg-white/3 transition"
               >
                 <div className="w-10 h-10 rounded-xl bg-accent/10 border border-accent/20 flex items-center justify-center text-accent">
-                  <Receipt className="w-5 h-5" />
+                  <Receipt aria-hidden="true" className="w-5 h-5" />
                 </div>
                 <div className="flex-1 min-w-0 grid grid-cols-2 md:grid-cols-4 gap-3">
                   <div>
