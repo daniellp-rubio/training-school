@@ -122,7 +122,7 @@ export default function InventarioPage() {
               aria-selected={cat === c.v}
               onClick={() => setCat(c.v)}
               className={`px-3 py-1.5 text-xs rounded-lg transition ${
-                cat === c.v ? "bg-accent text-black font-semibold" : "text-ink-dim hover:text-ink"
+                cat === c.v ? "bg-accent text-white font-semibold" : "text-ink-dim hover:text-ink"
               }`}
             >
               {c.l}

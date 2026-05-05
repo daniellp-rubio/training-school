@@ -159,7 +159,7 @@ export default function AsesorPage() {
                 <div
                   className={`max-w-[80%] px-4 py-3 rounded-2xl text-sm whitespace-pre-wrap ${
                     m.role === "user"
-                      ? "bg-accent text-black font-medium"
+                      ? "bg-accent text-white font-medium"
                       : "bg-white/5 border border-border text-ink"
                   }`}
                 >

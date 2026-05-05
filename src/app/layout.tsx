@@ -1,5 +1,7 @@
 import "./globals.css";
 import type { Metadata, Viewport } from "next";
+import { GeistSans } from "geist/font/sans";
+import { GeistMono } from "geist/font/mono";
 import Sidebar from "@/components/sidebar";
 import Topbar from "@/components/topbar";
 
@@ -69,11 +71,11 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="es" className="dark">
-      <body className="font-sans">
+    <html lang="es" className={`dark ${GeistSans.variable} ${GeistMono.variable}`}>
+      <body className="font-sans antialiased">
         <a
           href="#main-content"
-          className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-50 focus:px-3 focus:py-2 focus:rounded-lg focus:bg-accent focus:text-black focus:font-semibold"
+          className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-50 focus:px-3 focus:py-2 focus:rounded-lg focus:bg-accent focus:text-white focus:font-semibold"
         >
           Saltar al contenido principal
         </a>

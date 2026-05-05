@@ -1,16 +1,40 @@
-export default function Logo({ className = "" }: { className?: string }) {
+import Image from "next/image";
+
+export default function Logo({
+  className = "",
+  showText = true,
+  size = 36,
+}: {
+  className?: string;
+  showText?: boolean;
+  size?: number;
+}) {
   return (
-    <div className={`flex items-center gap-2.5 ${className}`}>
-      <div className="relative w-9 h-9 rounded-xl bg-gradient-to-br from-accent to-accent-dim flex items-center justify-center shadow-glow">
-        <svg viewBox="0 0 24 24" className="w-5 h-5 text-black" fill="currentColor">
-          <path d="M6 4h2v6h8V4h2v16h-2v-6H8v6H6V4z" />
-        </svg>
-        <span className="absolute -bottom-1 -right-1 w-2.5 h-2.5 rounded-full bg-accent animate-pulseGlow" />
+    <div className={`flex items-center gap-3 ${className}`}>
+      <div
+        className="relative rounded-xl bg-gradient-to-br from-white/10 to-white/0 border border-border-strong shadow-chrome flex items-center justify-center overflow-hidden"
+        style={{ width: size, height: size }}
+      >
+        <Image
+          src="/training_school.png"
+          alt="Training School"
+          width={size}
+          height={size}
+          priority
+          className="object-contain"
+        />
+        <span className="absolute -bottom-0.5 -right-0.5 w-2 h-2 rounded-full bg-accent-bright animate-pulseGlow" />
       </div>
-      <div className="leading-tight">
-        <div className="font-bold tracking-tight text-ink text-[15px]">Training School</div>
-        <div className="text-[10px] uppercase tracking-[0.18em] text-ink-muted">Tienda OS · v1.0</div>
-      </div>
+      {showText && (
+        <div className="leading-tight">
+          <div className="font-bold tracking-tight text-ink text-[15px]">
+            Training School
+          </div>
+          <div className="text-[10px] uppercase tracking-[0.18em] text-accent-bright/80">
+            Tienda OS · v1.0
+          </div>
+        </div>
+      )}
     </div>
   );
 }

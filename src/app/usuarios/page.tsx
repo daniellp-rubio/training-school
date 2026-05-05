@@ -113,7 +113,7 @@ export default function UsuariosPage() {
           >
             <div className="flex items-center gap-3 mb-3">
               <div
-                className={`w-10 h-10 rounded-xl bg-gradient-to-br ${roleColors[r]} flex items-center justify-center text-black text-xs font-bold`}
+                className={`w-10 h-10 rounded-xl bg-gradient-to-br ${roleColors[r]} flex items-center justify-center text-white text-xs font-bold`}
               >
                 {r[0].toUpperCase()}
               </div>
@@ -157,7 +157,7 @@ export default function UsuariosPage() {
                 <td className="px-5 py-3">
                   <div className="flex items-center gap-3">
                     <div
-                      className={`w-9 h-9 rounded-lg bg-gradient-to-br ${roleColors[u.role]} flex items-center justify-center text-black text-xs font-bold`}
+                      className={`w-9 h-9 rounded-lg bg-gradient-to-br ${roleColors[u.role]} flex items-center justify-center text-white text-xs font-bold`}
                     >
                       {u.name.split(" ").map((p) => p[0]).slice(0, 2).join("")}
                     </div>

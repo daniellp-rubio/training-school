@@ -67,7 +67,7 @@ export default function Topbar() {
         >
           <Bell aria-hidden="true" className="w-4 h-4 text-ink-dim" />
           {lowStock > 0 && (
-            <span aria-hidden="true" className="absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 rounded-full bg-accent text-black text-[10px] font-bold flex items-center justify-center">
+            <span aria-hidden="true" className="absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 rounded-full bg-accent text-white text-[10px] font-bold flex items-center justify-center">
               {lowStock}
             </span>
           )}
@@ -82,7 +82,7 @@ export default function Topbar() {
             className="flex items-center gap-2.5 pl-2 pr-3 py-1.5 rounded-xl bg-white/5 border border-border hover:bg-white/10 transition"
           >
             <div
-              className={`w-7 h-7 rounded-lg bg-gradient-to-br ${roleColor[user?.role ?? "admin"]} flex items-center justify-center text-black text-xs font-bold`}
+              className={`w-7 h-7 rounded-lg bg-gradient-to-br ${roleColor[user?.role ?? "admin"]} flex items-center justify-center text-white text-xs font-bold`}
             >
               {(user?.name ?? "").split(" ").map((p) => p[0]).slice(0, 2).join("")}
             </div>
@@ -112,7 +112,7 @@ export default function Topbar() {
                   className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-left hover:bg-white/5 transition ${u.id === user?.id ? "bg-white/5" : ""}`}
                 >
                   <div
-                    className={`w-8 h-8 rounded-lg bg-gradient-to-br ${roleColor[u.role]} flex items-center justify-center text-black text-xs font-bold`}
+                    className={`w-8 h-8 rounded-lg bg-gradient-to-br ${roleColor[u.role]} flex items-center justify-center text-white text-xs font-bold`}
                   >
                     {u.name.split(" ").map((p) => p[0]).slice(0, 2).join("")}
                   </div>

@@ -9,7 +9,7 @@ import {
   Legend,
 } from "recharts";
 
-const COLORS = ["#a3ff12", "#7c5cff", "#22d3ee", "#f472b6"];
+const COLORS = ["#3b82f6", "#60a5fa", "#c0c8d4", "#1e40af"];
 
 export default function CategoryChart({
   data,

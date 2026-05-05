@@ -59,7 +59,7 @@ export default function Sidebar() {
               aria-current={active ? "page" : undefined}
               className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm transition-all ${
                 active
-                  ? "bg-accent/10 text-accent border border-accent/30 shadow-[inset_0_0_30px_-12px_rgba(163,255,18,0.4)]"
+                  ? "bg-accent/10 text-accent border border-accent/30 shadow-[inset_0_0_30px_-12px_rgba(59,130,246,0.45)]"
                   : "text-ink-dim hover:text-ink hover:bg-white/5"
               }`}
             >

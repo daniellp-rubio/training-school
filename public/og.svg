@@ -1,25 +1,39 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630">
   <defs>
     <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#070709"/>
-      <stop offset="1" stop-color="#04040a"/>
+      <stop offset="0%" stop-color="#060810"/>
+      <stop offset="100%" stop-color="#020308"/>
     </linearGradient>
-    <radialGradient id="glow" cx="0.15" cy="0.1" r="0.6">
-      <stop offset="0" stop-color="#a3ff12" stop-opacity="0.25"/>
-      <stop offset="1" stop-color="#a3ff12" stop-opacity="0"/>
+    <radialGradient id="glow1" cx="20%" cy="0%" r="60%">
+      <stop offset="0%" stop-color="#3b82f6" stop-opacity="0.35"/>
+      <stop offset="100%" stop-color="#3b82f6" stop-opacity="0"/>
     </radialGradient>
+    <radialGradient id="glow2" cx="100%" cy="100%" r="60%">
+      <stop offset="0%" stop-color="#60a5fa" stop-opacity="0.25"/>
+      <stop offset="100%" stop-color="#60a5fa" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="blue" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#60a5fa"/>
+      <stop offset="100%" stop-color="#1e40af"/>
+    </linearGradient>
+    <linearGradient id="chrome" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#e8ecf2"/>
+      <stop offset="50%" stop-color="#8b95a7"/>
+      <stop offset="100%" stop-color="#4a5366"/>
+    </linearGradient>
   </defs>
   <rect width="1200" height="630" fill="url(#bg)"/>
-  <rect width="1200" height="630" fill="url(#glow)"/>
-  <g transform="translate(80,180)">
-    <text x="0" y="0" font-family="system-ui, -apple-system, Segoe UI, sans-serif" font-size="22" letter-spacing="6" fill="#a3ff12" font-weight="600">TIENDA OS · MEDELLÍN</text>
-    <text x="0" y="90" font-family="system-ui, -apple-system, Segoe UI, sans-serif" font-size="84" fill="#e8e8ee" font-weight="800">Training School</text>
-    <text x="0" y="180" font-family="system-ui, -apple-system, Segoe UI, sans-serif" font-size="44" fill="#a8a8b8" font-weight="500">Inventario · POS · Asesor IA</text>
-    <text x="0" y="280" font-family="system-ui, -apple-system, Segoe UI, sans-serif" font-size="26" fill="#7a7a8a">Decisiones de tienda con datos en tiempo real</text>
+  <rect width="1200" height="630" fill="url(#glow1)"/>
+  <rect width="1200" height="630" fill="url(#glow2)"/>
+
+  <g transform="translate(110,200)">
+    <rect x="40" y="60" width="200" height="20" rx="6" fill="url(#chrome)"/>
+    <rect x="20" y="40" width="22" height="60" rx="4" fill="url(#blue)"/>
+    <rect x="238" y="40" width="22" height="60" rx="4" fill="url(#blue)"/>
+    <text x="140" y="55" font-family="Arial Black, sans-serif" font-size="44" font-weight="900" text-anchor="middle" fill="url(#chrome)">TS</text>
   </g>
-  <g transform="translate(880,440)">
-    <circle cx="80" cy="80" r="80" fill="#a3ff12" opacity="0.12"/>
-    <circle cx="80" cy="80" r="48" fill="#a3ff12"/>
-    <text x="80" y="92" text-anchor="middle" font-family="system-ui" font-size="44" fill="#000" font-weight="800">TS</text>
-  </g>
+
+  <text x="110" y="430" font-family="system-ui, sans-serif" font-size="78" font-weight="800" fill="#e8ecf2">Training School</text>
+  <text x="110" y="490" font-family="system-ui, sans-serif" font-size="34" font-weight="500" fill="#9ca5b8">Sistema de tienda con IA · Inventario, POS y Asesor Coach Pro</text>
+  <text x="110" y="560" font-family="ui-monospace, monospace" font-size="20" font-weight="600" letter-spacing="3" fill="#3b82f6">TIENDA OS · MEDELLÍN · v1.0</text>
 </svg>

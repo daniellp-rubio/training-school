@@ -64,7 +64,7 @@ export default function VentasPage() {
             aria-selected={filter === f.v}
             onClick={() => setFilter(f.v)}
             className={`px-3 py-1.5 text-xs rounded-lg transition ${
-              filter === f.v ? "bg-accent text-black font-semibold" : "text-ink-dim hover:text-ink"
+              filter === f.v ? "bg-accent text-white font-semibold" : "text-ink-dim hover:text-ink"
             }`}
           >
             {f.l}

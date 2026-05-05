@@ -14,7 +14,7 @@ html, body {
 }
 
 *:focus-visible {
-  outline: 2px solid #a3ff12;
+  outline: 2px solid #3b82f6;
   outline-offset: 2px;
   border-radius: 6px;
 }
@@ -30,15 +30,16 @@ html, body {
 
 body {
   background-image:
-    radial-gradient(900px circle at 10% -10%, rgba(163,255,18,0.10), transparent 50%),
-    radial-gradient(700px circle at 100% 0%, rgba(120,80,255,0.08), transparent 60%),
-    linear-gradient(180deg, #070709 0%, #04040a 100%);
+    radial-gradient(900px circle at 10% -10%, rgba(59,130,246,0.14), transparent 55%),
+    radial-gradient(700px circle at 100% 0%, rgba(96,165,250,0.10), transparent 60%),
+    radial-gradient(600px circle at 50% 100%, rgba(30,64,175,0.08), transparent 60%),
+    linear-gradient(180deg, #060810 0%, #04060c 100%);
   min-height: 100vh;
 }
 
 * { border-color: rgba(255,255,255,0.06); }
 
-::selection { background: rgba(163,255,18,0.35); color: #e8e8ee; }
+::selection { background: rgba(59,130,246,0.35); color: #e8e8ee; }
 
 ::-webkit-scrollbar { width: 10px; height: 10px; }
 ::-webkit-scrollbar-track { background: transparent; }
@@ -59,7 +60,7 @@ body {
     @apply inline-flex items-center justify-center gap-2 px-4 py-2 rounded-xl text-sm font-medium transition-all;
   }
   .btn-primary {
-    @apply btn bg-accent text-black hover:bg-accent-dim shadow-glow;
+    @apply btn bg-gradient-to-br from-accent-bright to-accent text-white font-semibold hover:from-accent hover:to-accent-dim shadow-glow;
   }
   .btn-ghost {
     @apply btn bg-white/5 hover:bg-white/10 text-ink border border-border;
@@ -82,9 +83,9 @@ body {
 .shine {
   background: linear-gradient(
     90deg,
-    rgba(163,255,18,0) 0%,
-    rgba(163,255,18,0.15) 50%,
-    rgba(163,255,18,0) 100%
+    rgba(59,130,246,0) 0%,
+    rgba(59,130,246,0.15) 50%,
+    rgba(59,130,246,0) 100%
   );
   background-size: 1000px 100%;
 }

@@ -11,8 +11,9 @@
   "dependencies": {
     "@anthropic-ai/sdk": "^0.94.0",
     "framer-motion": "^11.11.17",
+    "geist": "^1.7.0",
     "lucide-react": "^0.460.0",
-    "next": "15.0.3",
+    "next": "^16.2.4",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "recharts": "^2.13.3",
@@ -24,8 +25,11 @@
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "autoprefixer": "^10.4.20",
-    "postcss": "^8.4.49",
+    "postcss": "^8.5.14",
     "tailwindcss": "^3.4.15",
     "typescript": "^5"
+  },
+  "overrides": {
+    "postcss": "^8.5.14"
   }
 }
